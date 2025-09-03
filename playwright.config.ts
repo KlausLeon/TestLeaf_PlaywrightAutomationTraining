@@ -37,7 +37,13 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      // override the device settings to ensure the viewport is a concrete size
+      use: { 
+        ...devices['Desktop Chrome'],
+        // use the device's default viewport instead of `null` to avoid the deviceScaleFactor + null viewport error
+        viewport: devices['Desktop Chrome'].viewport,
+        launchOptions: { args: ['--start-maximized'] },
+      },
     }/*,
 
     {
