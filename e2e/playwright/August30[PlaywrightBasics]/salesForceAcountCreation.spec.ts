@@ -4,17 +4,19 @@ test("Create new Salesforce Account", async ({ page }) => {
   await page.goto("https://login.salesforce.com/");
 
   // Step 2: Enter username using getByLabel
-  await page.getByLabel("Username").fill("your_username_here");
+  await page.getByLabel("Username").fill("dilip@testleaf.com");
 
   // Step 3: Enter password using getByLabel
-  await page.getByLabel("Password").fill("your_password_here");
-
+  await page.getByLabel("Password").fill("Leaf@2025");
+  
   // Step 4: Click Login
   await page.getByRole("button", { name: "Log In" }).click();
 
+  await page.waitForTimeout(4000);
+  
   // Step 5: Verify the title and URL of the page using appropriate assertions
   await expect(page).toHaveTitle(/.*Salesforce.*/);
-  await expect(page).toHaveURL(/.*salesforce\.com.*/);
+  await expect(page).toHaveURL(/.*ed.develop.lightning.force\.com.*/);
 
   // Step 6: Click App Launcher using the class locator
   await page.locator(".appLauncher").click();
@@ -22,11 +24,12 @@ test("Create new Salesforce Account", async ({ page }) => {
   // Step 7: Click View All using getByText
   await page.getByText("View All").click();
 
+  //await page.waitForTimeout(4000);
   // Step 8: Enter 'Service' in the App Launcher Search box using getByPlaceHolder
-  await page.getByPlaceholder("Search apps and items...").fill("Service");
+  await page.getByPlaceholder("Search apps or items...").pressSequentially("Service");
 
   // Step 9: Click Service using index based XPath
-  await page.locator("(//span[text()='Service'])[1]").click();
+  await page.locator("(//mark[text()='Service'])[1]").click();
 
   // Step 10: Click Accounts using attribute based CSS selector
   await page.locator("a[href*='Account']").click();
@@ -44,5 +47,6 @@ test("Create new Salesforce Account", async ({ page }) => {
   // Step 14: Verify the toast message displayed
   const toastMessage = page.locator(".toastMessage");
   await expect(toastMessage).toBeVisible();
-  await expect(toastMessage).toContainText("success");
+  let successMessage = "Account \""+accountName+"\" was created";
+  await expect(toastMessage).toContainText(successMessage);
 });
